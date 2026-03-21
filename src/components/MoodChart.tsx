@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { BarChart, Bar, ResponsiveContainer, XAxis, Tooltip } from 'recharts';
 
+const API_BASE = import.meta.env.VITE_API_URL || '';
+
 export function MoodChart() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch('/api/mood/history')
+        fetch(`${API_BASE}/api/mood/history`)
             .then(res => res.json())
             .then(data => {
                 setData(data);

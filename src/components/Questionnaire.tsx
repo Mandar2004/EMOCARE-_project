@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Navbar } from './Navbar';
 import { ChevronRight, Check, AlertTriangle, ShieldCheck, TrendingUp, BookOpen, Heart, Phone } from 'lucide-react';
 
+const API_BASE = import.meta.env.VITE_API_URL || '';
 const questions = [
     { id: 1, text: "Feeling nervous, anxious, or on edge" },
     { id: 2, text: "Not being able to stop or control worrying" },
@@ -47,7 +48,7 @@ export function Questionnaire() {
 
     const fetchHistory = async () => {
         try {
-            const response = await fetch('/api/gad7/history?limit=5');
+            const response = await fetch(`${API_BASE}/api/gad7/history?limit=5`);
             if (response.ok) {
                 const data = await response.json();
                 setHistory(data);
@@ -143,7 +144,7 @@ export function Questionnaire() {
         console.log('Submitting:', { score, severity: severity.level });
 
         try {
-            const response = await fetch('/api/gad7/submit', {
+            const response = await fetch(`${API_BASE}/api/gad7/submit`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

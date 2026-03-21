@@ -7,6 +7,8 @@ import { Smile, Mic, Play, ArrowRight, Sparkles } from 'lucide-react';
 import avatarImg from '../assets/avatar.png';
 import { useRequireAuth } from '../hooks/useRequireAuth';
 
+const API_BASE = import.meta.env.VITE_API_URL || '';
+
 export function Dashboard() {
     const [showDetector, setShowDetector] = useState(false);
     const [lastMood, setLastMood] = useState<{ emotion: string; confidence: number; response?: string } | null>(null);
@@ -15,7 +17,7 @@ export function Dashboard() {
 
     const fetchStats = async () => {
         try {
-            const res = await fetch('/api/stats');
+            const res = await fetch(`${API_BASE}/api/stats`);
             if (!res.ok) throw new Error('Failed to fetch');
             const data = await res.json();
             setStats(data);

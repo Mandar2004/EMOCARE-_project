@@ -1,5 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { Camera, Mic, X, Activity, RefreshCw } from 'lucide-react';
+
+const API_BASE = import.meta.env.VITE_API_URL || '';
 import { EmotionIcon } from './EmotionIcon';
 import { AudioVisualizer } from './AudioVisualizer';
 
@@ -35,7 +37,7 @@ export function EmotionDetector({ onClose, onResult }: {
     useEffect(() => {
         const fetchRecentMoods = async () => {
             try {
-                const response = await fetch('/api/mood/recent?limit=3');
+                const response = await fetch(`${API_BASE}/api/mood/recent?limit=3`);
                 if (response.ok) {
                     const data = await response.json();
                     setRecentMoods(data);
@@ -213,7 +215,7 @@ export function EmotionDetector({ onClose, onResult }: {
                 if (imageBase64) {
                     setAnalysisProgress('Analyzing facial expressions...');
                     promises.push(
-                        fetch('/api/analyze/face', {
+                        fetch(`${API_BASE}/api/analyze/face`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ image: imageBase64 }),
@@ -224,7 +226,7 @@ export function EmotionDetector({ onClose, onResult }: {
                 if (audioBase64) {
                     setAnalysisProgress('Analyzing vocal tone...');
                     promises.push(
-                        fetch('/api/analyze/audio', {
+                        fetch(`${API_BASE}/api/analyze/audio`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ audio: audioBase64 }),
@@ -268,7 +270,7 @@ export function EmotionDetector({ onClose, onResult }: {
 
                 setAnalysisProgress('Saving to history...');
                 // SAVE TO BACKEND
-                await fetch('/api/mood', {
+                await fetch(`${API_BASE}/api/mood`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -283,7 +285,7 @@ export function EmotionDetector({ onClose, onResult }: {
 
             } else if (activeTab === 'text') {
                 setAnalysisProgress('Analyzing sentiment...');
-                const response = await fetch('/api/analyze/text', {
+                const response = await fetch(`${API_BASE}/api/analyze/text`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ text: textInput }),
@@ -292,7 +294,7 @@ export function EmotionDetector({ onClose, onResult }: {
 
                 setAnalysisProgress('Saving to history...');
                 // SAVE TO BACKEND
-                await fetch('/api/mood', {
+                await fetch(`${API_BASE}/api/mood`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -328,7 +330,7 @@ export function EmotionDetector({ onClose, onResult }: {
         // Refresh recent moods after completing an analysis
         const fetchRecentMoods = async () => {
             try {
-                const response = await fetch('/api/mood/recent?limit=3');
+                const response = await fetch(`${API_BASE}/api/mood/recent?limit=3`);
                 if (response.ok) {
                     const data = await response.json();
                     setRecentMoods(data);
