@@ -1,0 +1,37 @@
+{
+    "happy": [
+        "You're glowing! Capture this feeling and share your positivity with someone today.",
+        "Happiness looks good on you! Keep spreading those good vibes.",
+        "That's the spirit! Enjoy this moment of joy."
+    ],
+    "sad": [
+        "It's okay to feel this way. Remember, clouds always pass. Take a deep breath.",
+        "I'm here for you. allow yourself to feel, and know that better days are coming.",
+        "Sending you a virtual hug. Be gentle with yourself today."
+    ],
+    "angry": [
+        "It sounds like things are tough right now. Take a moment to breathe and center yourself.",
+        "Your feelings are valid. Channel that energy into something constructive if you can.",
+        "Deep breaths. Step away for a moment if you need to."
+    ],
+    "fear": [
+        "You are stronger than you think. Take it one step at a time.",
+        "It's okay to be scared. Courage is acting despite the fear.",
+        "Focus on what you can control right now. You've got this."
+    ],
+    "surprise": [
+        "Life is full of surprises! Embrace the unexpected.",
+        "Wow! That sounds interesting. How do you feel about it?",
+        "Unexpected moments can lead to new opportunities."
+    ],
+    "neutral": [
+        "A balanced mind is a powerful tool. Wishing you a peaceful day.",
+        "Stability is a strength. Enjoy the calm.",
+        "Just being is enough. Have a steady and productive day."
+    ],
+    "default": [
+        "I'm listening. Tell me more about how you're feeling.",
+        "Thank you for sharing. I'm here to support you.",
+        "Your mental well-being matters. How can I help?"
+    ]
+}
