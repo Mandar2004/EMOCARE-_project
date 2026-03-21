@@ -2,9 +2,15 @@
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import fs from 'fs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: path.resolve(__dirname, '..', '.env') });
+
+// Load .env from parent dir (local dev) — skip on Render (env vars injected directly)
+const envPath = path.resolve(__dirname, '..', '.env');
+if (fs.existsSync(envPath)) {
+  dotenv.config({ path: envPath });
+}
 
 import express from 'express';
 import cors from 'cors';
@@ -13,7 +19,15 @@ import { runAgentLoop, analyzeText } from './agent.js';
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+// Allow requests from Netlify frontend + localhost for dev
+app.use(cors({
+  origin: [
+    'https://emocare2026.netlify.app',
+    'http://localhost:5173',
+    'http://localhost:5174',
+  ],
+  methods: ['GET', 'POST'],
+}));
 app.use(express.json({ limit: '10mb' }));
 
 // ── Health check ────────────────────────────────────────────────────────────

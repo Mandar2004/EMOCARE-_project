@@ -4,6 +4,9 @@ import { Send, Sparkles, Trash2, Brain, Heart, Shield } from 'lucide-react';
 import avatarImg from '../assets/avatar.png';
 import { MessageBubble } from './MessageBubble';
 
+// In production (Netlify), points to Render backend. In dev, empty = uses Vite proxy.
+const API_BASE = import.meta.env.VITE_API_URL || '';
+
 interface Message {
     id: number;
     text: string;
@@ -90,7 +93,7 @@ export function ChatPage() {
 
     // Check if agent backend is online
     useEffect(() => {
-        fetch('/api/health')
+        fetch(`${API_BASE}/api/health`)
             .then(r => r.ok ? r.json() : Promise.reject())
             .then(() => setAgentOnline(true))
             .catch(() => setAgentOnline(false));
@@ -124,7 +127,7 @@ export function ChatPage() {
                 content: m.text,
             }));
 
-            const response = await fetch('/api/chat', {
+            const response = await fetch(`${API_BASE}/api/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
