@@ -16,7 +16,7 @@ interface AuthContextType {
     loading: boolean;
     signIn: (email: string, password: string) => Promise<{ error: string | null }>;
     signUp: (email: string, password: string, name: string) => Promise<{ error: string | null; needsConfirmation?: boolean }>;
-    signInWithOAuth: (provider: 'google' | 'facebook') => Promise<{ error: string | null }>;
+    signInWithOAuth: (provider: 'google' | 'facebook' | 'apple') => Promise<{ error: string | null }>;
     signOut: () => Promise<void>;
     resetPassword: (email: string) => Promise<{ error: string | null }>;
     isAuthenticated: boolean;
@@ -84,7 +84,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     // ── OAuth (Google / Apple) ────────────────────────────────────────────
-    const signInWithOAuth = async (provider: 'google' | 'facebook'): Promise<{ error: string | null }> => {
+    const signInWithOAuth = async (provider: 'google' | 'facebook' | 'apple'): Promise<{ error: string | null }> => {
         const { error } = await supabase.auth.signInWithOAuth({
             provider,
             options: { redirectTo: `${window.location.origin}/` },
