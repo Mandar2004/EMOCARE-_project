@@ -41,8 +41,7 @@ export function SignInPage() {
     const [error, setError] = useState<string | null>(null);
     const [forgotMsg, setForgotMsg] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [oauthLoading, setOauthLoading] = useState<'google' | 'apple' | null>(null);
-    const { signIn, resetPassword, signInWithOAuth } = useAuth();
+    const { signIn, resetPassword } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -70,16 +69,6 @@ export function SignInPage() {
             setError(error);
         } else {
             setForgotMsg('Password reset email sent! Check your inbox.');
-        }
-    };
-
-    const handleOAuth = async (provider: 'google' | 'apple') => {
-        setError(null);
-        setOauthLoading(provider);
-        const { error } = await signInWithOAuth(provider);
-        if (error) {
-            setError(error);
-            setOauthLoading(null);
         }
     };
 
@@ -157,34 +146,7 @@ export function SignInPage() {
                         <p className="text-slate-500 text-sm">Sign in to continue your wellness journey.</p>
                     </div>
 
-                    {/* OAuth Buttons */}
-                    <div className="grid grid-cols-2 gap-3 mb-6">
-                        <button
-                            type="button"
-                            onClick={() => handleOAuth('google')}
-                            disabled={!!oauthLoading || isLoading}
-                            className="flex items-center justify-center gap-2 py-3 bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 rounded-xl transition-all shadow-sm hover:shadow-md active:scale-95 disabled:opacity-60 font-semibold text-slate-700 text-sm"
-                        >
-                            {oauthLoading === 'google' ? <Loader2 size={18} className="animate-spin text-slate-400" /> : <GoogleLogo />}
-                            Google
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => handleOAuth('apple')}
-                            disabled={!!oauthLoading || isLoading}
-                            className="flex items-center justify-center gap-2 py-3 bg-slate-900 hover:bg-black border border-slate-900 rounded-xl transition-all shadow-sm hover:shadow-md active:scale-95 disabled:opacity-60 font-semibold text-white text-sm"
-                        >
-                            {oauthLoading === 'apple' ? <Loader2 size={18} className="animate-spin" /> : <AppleLogo />}
-                            Apple
-                        </button>
-                    </div>
 
-                    {/* Divider */}
-                    <div className="relative flex items-center mb-6">
-                        <div className="flex-grow border-t border-slate-200" />
-                        <span className="mx-4 text-slate-400 text-xs font-semibold uppercase tracking-widest">or</span>
-                        <div className="flex-grow border-t border-slate-200" />
-                    </div>
 
                     {/* Error / Success Banners */}
                     {error && (
@@ -252,7 +214,7 @@ export function SignInPage() {
 
                         <button
                             type="submit"
-                            disabled={isLoading || !!oauthLoading}
+                            disabled={isLoading}
                             className="w-full py-3.5 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-violet-200 transform transition-all active:scale-95 disabled:opacity-70 disabled:scale-100 flex items-center justify-center gap-2 text-sm mt-2"
                         >
                             {isLoading ? <><Loader2 size={18} className="animate-spin" /> Signing in...</> : 'Sign In →'}

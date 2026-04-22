@@ -12,7 +12,7 @@ export function SignOutPage() {
     const handleLogout = async () => {
         setIsLoading(true);
         await signOut();
-        navigate('/signin');
+        navigate('/');
     };
 
     return (

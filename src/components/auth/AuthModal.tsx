@@ -40,27 +40,6 @@ const passwordRules = [
     { label: 'One number', test: (p: string) => /[0-9]/.test(p) },
 ];
 
-// ── OAuth row ──────────────────────────────────────────────────────────────
-function OAuthRow({ onOAuth, oauthLoading, disabled }: {
-    onOAuth: (p: 'google') => void;
-    oauthLoading: 'google' | null;
-    disabled: boolean;
-}) {
-    return (
-        <div className="mb-5">
-            <button
-                type="button"
-                onClick={() => onOAuth('google')}
-                disabled={disabled || !!oauthLoading}
-                className="w-full flex items-center justify-center gap-2 py-2.5 bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 rounded-xl transition-all shadow-sm active:scale-95 disabled:opacity-60 font-semibold text-slate-700 text-sm"
-            >
-                {oauthLoading === 'google' ? <Loader2 size={16} className="animate-spin text-slate-400" /> : <GoogleLogo />}
-                Continue with Google
-            </button>
-        </div>
-    );
-}
-
 // ── Sign In Form ───────────────────────────────────────────────────────────
 function SignInForm({ onSuccess }: { onSuccess: () => void }) {
     const [email, setEmail] = useState('');
@@ -69,8 +48,7 @@ function SignInForm({ onSuccess }: { onSuccess: () => void }) {
     const [error, setError] = useState<string | null>(null);
     const [forgotMsg, setForgotMsg] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [oauthLoading, setOauthLoading] = useState<'google' | null>(null);
-    const { signIn, resetPassword, signInWithOAuth } = useAuth();
+    const { signIn, resetPassword } = useAuth();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -91,24 +69,8 @@ function SignInForm({ onSuccess }: { onSuccess: () => void }) {
         else setForgotMsg('Password reset email sent! Check your inbox.');
     };
 
-    const handleOAuth = async (provider: 'google') => {
-        setError(null);
-        setOauthLoading(provider);
-        const { error } = await signInWithOAuth(provider);
-        if (error) { setError(error); setOauthLoading(null); }
-    };
-
     return (
         <div className="space-y-0">
-            <OAuthRow onOAuth={handleOAuth} oauthLoading={oauthLoading} disabled={isLoading} />
-
-            {/* Divider */}
-            <div className="relative flex items-center mb-5">
-                <div className="flex-grow border-t border-slate-200" />
-                <span className="mx-3 text-slate-400 text-xs font-semibold uppercase tracking-widest">or</span>
-                <div className="flex-grow border-t border-slate-200" />
-            </div>
-
             {error && (
                 <div role="alert" className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-600 text-xs rounded-xl px-3 py-2.5 mb-4">
                     <AlertCircle size={14} className="shrink-0" /><span>{error}</span>
@@ -159,7 +121,7 @@ function SignInForm({ onSuccess }: { onSuccess: () => void }) {
 
                 <button
                     type="submit"
-                    disabled={isLoading || !!oauthLoading}
+                    disabled={isLoading}
                     className="w-full py-3 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-violet-200/50 transition-all active:scale-95 disabled:opacity-70 flex items-center justify-center gap-2 text-sm"
                 >
                     {isLoading ? <><Loader2 size={16} className="animate-spin" /> Signing in...</> : 'Sign In →'}
@@ -177,8 +139,7 @@ function SignUpForm({ onConfirmNeeded }: { onConfirmNeeded: (email: string) => v
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [oauthLoading, setOauthLoading] = useState<'google' | null>(null);
-    const { signUp, signInWithOAuth } = useAuth();
+    const { signUp } = useAuth();
     const { closeModal } = useAuthModal();
     const strength = getPasswordStrength(password);
 
@@ -194,23 +155,8 @@ function SignUpForm({ onConfirmNeeded }: { onConfirmNeeded: (email: string) => v
         else closeModal();
     };
 
-    const handleOAuth = async (provider: 'google') => {
-        setError(null);
-        setOauthLoading(provider);
-        const { error } = await signInWithOAuth(provider);
-        if (error) { setError(error); setOauthLoading(null); }
-    };
-
     return (
         <div>
-            <OAuthRow onOAuth={handleOAuth} oauthLoading={oauthLoading} disabled={isLoading} />
-
-            <div className="relative flex items-center mb-5">
-                <div className="flex-grow border-t border-slate-200" />
-                <span className="mx-3 text-slate-400 text-xs font-semibold uppercase tracking-widest">or</span>
-                <div className="flex-grow border-t border-slate-200" />
-            </div>
-
             {error && (
                 <div role="alert" className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-600 text-xs rounded-xl px-3 py-2.5 mb-4">
                     <AlertCircle size={14} className="shrink-0" /><span>{error}</span>
@@ -288,7 +234,7 @@ function SignUpForm({ onConfirmNeeded }: { onConfirmNeeded: (email: string) => v
 
                 <button
                     type="submit"
-                    disabled={isLoading || !!oauthLoading}
+                    disabled={isLoading}
                     className="w-full py-3 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-violet-200/50 transition-all active:scale-95 disabled:opacity-70 flex items-center justify-center gap-2 text-sm"
                 >
                     {isLoading ? <><Loader2 size={16} className="animate-spin" /> Creating account...</> : 'Create Account →'}
